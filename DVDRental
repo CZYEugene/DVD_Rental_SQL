@@ -1,0 +1,72 @@
+--how many payment transcation greater than $5?
+SELECT count(*) FROM payment where amount >5
+
+-- how many actors have a first name that starts with the letter P? 
+SELECT COUNT(*) FROM actor where first_name like 'P%'
+
+-- how many unique districts are our customers from? 
+select count (distinct(district)) from address
+
+-- retrive the list of names for those distinct districts from previous question
+select distinct district from address
+
+-- how many films have a rating of r and a replacment cost between $5 and $15?
+select count(*) from film where rating = 'R' and replacement_cost between 5 and 15
+
+--how many films have the word Truman somewhere in the title? 
+select count(*) from film where title like '%Truman%'
+
+-- training on groupby--------------------------------------------------
+select staff_id, count(amount) from payment 
+group by staff_id 
+
+select rating, avg(replacement_cost) from film 
+group by rating 
+order by avg(replacement_cost) desc
+
+select customer_id, sum(amount) from payment
+group by customer_id 
+order by sum(amount) desc 
+limit 5
+
+--training having(filter)------------------------------------------------------------
+select customer_id, count(payment_id) from payment 
+group by customer_id 
+having count(payment_id)>=40
+order by count(payment_id) desc
+
+select customer_id, sum(amount)
+from payment 
+where staff_id=2
+group by customer_id 
+having sum(amount)>100
+
+--- assesment test 1-----------------------------------------------------------------------------------
+-- return customer ids of customer who spent at least $110 with staff_id=2
+select customer_id, sum(amount) from payment where staff_id=2 
+group by customer_id 
+having sum(amount)>110
+
+-- how many films begins with J? 
+select count(title) from film where title like 'J%'
+
+--what customer has the highest customerid whoose name starts with an 'E' and has an address id 
+-- lower than 500? 
+select first_name, last_name from customer where first_name like 'E%' and address_id < 500 
+order by customer_id desc 
+limit 1
+
+--- training JOINS-----------------------------------------------------------------------------------
+select district, email from address 
+inner join customer 
+on address.address_id = customer.address_id
+where district='California'
+
+select title, first_name, last_name 
+from film_actor inner join actor 
+on film_actor.actor_id = actor.actor_id
+inner join film 
+on film_actor.film_id = film.film_id
+where first_name = 'Nick' and last_name = 'Wahlberg'
+
+-----------------------------------------------------------------------------------------------
